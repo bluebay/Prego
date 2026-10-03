@@ -31,6 +31,6 @@ No se inventaron precios, medidas, composición, plazos, garantías ni stock. Co
 
 Sube `app/` y `public/` al alojamiento PHP y configura la raíz pública del dominio para que apunte a `public/`. Mantén `app/`, las imágenes originales y `.tools/` fuera de la raíz pública. Activa HTTPS. No subas `.tools/`, `.qa/` ni `contact-sheet.jpg`.
 
-El contacto no requiere configurar correo del servidor: usa enlaces `mailto:` y WhatsApp. El formulario valida en PHP y usa protección CSRF. Sus datos no se almacenan; se incorporan al enlace de WhatsApp al continuar. El visitante debe confirmar el envío en WhatsApp.
+El contacto no requiere configurar correo del servidor: usa enlaces `mailto:` y WhatsApp. Todos los campos son opcionales. Con JavaScript, el botón es un enlace directo a `https://api.whatsapp.com/send` que se actualiza con los detalles del formulario. Abre la pantalla oficial de WhatsApp en la misma pestaña, evitando ventanas emergentes y redirecciones de formularios que pueden bloquearse en vistas previas. Sin JavaScript, PHP valida el formulario con protección CSRF y muestra un enlace para abrir WhatsApp. Los datos no se almacenan; el visitante debe confirmar el envío en WhatsApp.
 
 Las fichas también funcionan sin JavaScript (`index.php?producto=veta-blanca`). Los filtros y las galerías en ventanas de detalle se activan con JavaScript. Las tipografías se sirven localmente.

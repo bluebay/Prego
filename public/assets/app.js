@@ -62,6 +62,7 @@ document.querySelectorAll('[data-enquire]').forEach(link => {
   link.addEventListener('click', () => {
     const radio = document.querySelector(`input[name="product"][value="${link.dataset.enquire}"]`);
     if (radio) radio.checked = true;
+    radio?.dispatchEvent(new Event('change', { bubbles: true }));
     const dialog = link.closest('dialog');
     if (dialog?.open) dialog.close();
     // Focus the form after dialog focus restoration, keeping the field visible.
@@ -70,3 +71,57 @@ document.querySelectorAll('[data-enquire]').forEach(link => {
 });
 
 document.querySelector('.form-errors')?.focus();
+
+const contactForm = document.querySelector('.contact-form');
+const whatsappLink = document.querySelector('#whatsapp-consult');
+const whatsappFallback = document.querySelector('#whatsapp-same-tab');
+const whatsappFeedback = document.querySelector('#whatsapp-feedback');
+const emailInput = contactForm?.querySelector('#email');
+const emailError = document.querySelector('#email-error');
+
+if (contactForm && whatsappLink) {
+  const updateWhatsapp = () => {
+    const values = new FormData(contactForm);
+    const name = String(values.get('name') ?? '').trim();
+    const email = String(values.get('email') ?? '').trim();
+    const dimensions = String(values.get('dimensions') ?? '').trim();
+    const message = String(values.get('message') ?? '').trim();
+    const product = contactForm.querySelector('input[name="product"]:checked')?.dataset.productLabel ?? 'Asesoría para elegir una cubierta';
+    let text = `${name ? `Hola PREGO, soy ${name}.` : 'Hola PREGO.'} Me gustaría cotizar una cubierta de mesa.\nAcabado: ${product}.`;
+    if (dimensions) text += `\nMedidas aproximadas: ${dimensions}.`;
+    if (email) text += `\nMi correo: ${email}.`;
+    if (message) text += `\n${message}`;
+    const url = `https://api.whatsapp.com/send?phone=${contactForm.dataset.whatsappNumber}&text=${encodeURIComponent(text)}`;
+    whatsappLink.href = url;
+    whatsappFallback.href = url;
+  };
+  const showEmailError = () => {
+    const invalid = !emailInput.validity.valid;
+    emailError.hidden = !invalid;
+    if (invalid) emailInput.setAttribute('aria-invalid', 'true');
+    else emailInput.removeAttribute('aria-invalid');
+  };
+  contactForm.addEventListener('input', () => {
+    updateWhatsapp();
+    // Clear feedback while the visitor corrects an error.
+    if (emailInput.validity.valid) showEmailError();
+    whatsappFeedback.hidden = true;
+  });
+  contactForm.addEventListener('change', updateWhatsapp);
+  emailInput.addEventListener('blur', showEmailError);
+  whatsappLink.addEventListener('click', event => {
+    showEmailError();
+    if (!contactForm.reportValidity()) {
+      event.preventDefault();
+      return;
+    }
+    // Use a real external link, rather than a server redirect or a scripted popup.
+    updateWhatsapp();
+    whatsappFeedback.hidden = false;
+  });
+  updateWhatsapp();
+  contactForm.querySelector('button[type="submit"]').hidden = true;
+  whatsappLink.hidden = false;
+}
+
+document.querySelector('.whatsapp-prepared')?.focus();

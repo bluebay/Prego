@@ -18,7 +18,7 @@
     <a class="brand" href="index.php" aria-label="PREGO, inicio">prego<span>.</span><small>CUBIERTAS & DISEÑO</small></a>
     <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-controls="navigation" aria-expanded="false"><span></span><span></span></button>
     <nav id="navigation" aria-label="Navegación principal">
-        <a href="#coleccion">La colección</a><a href="#inspiracion">Inspiración</a><a href="#proceso">Cómo cotizar</a>
+        <a href="index.php#coleccion">La colección</a><a href="index.php#inspiracion">Inspiración</a><a href="index.php#proceso">Cómo cotizar</a>
     </nav>
     <a class="header-contact" href="#contacto">Hablemos de tu mesa <span aria-hidden="true">↗</span></a>
 </header>

@@ -64,8 +64,8 @@ document.querySelectorAll('[data-enquire]').forEach(link => {
     if (radio) radio.checked = true;
     const dialog = link.closest('dialog');
     if (dialog?.open) dialog.close();
-    // Defer focus until after native anchor scrolling and dialog focus restoration.
-    window.setTimeout(() => document.querySelector('#name')?.focus({ preventScroll: true }), 450);
+    // Focus the form after dialog focus restoration, keeping the field visible.
+    window.setTimeout(() => document.querySelector('#name')?.focus(), 450);
   });
 });
 
